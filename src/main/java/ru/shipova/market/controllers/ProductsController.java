@@ -40,22 +40,12 @@ public class ProductsController {
         if (max != null) {
             spec = spec.and(ProductSpecifications.priceLesserThanOrEq(max));
         }
+        //добавляем параметры в model, чтобы они не сбрасывались на странице
+        model.addAttribute("word", word);
+        model.addAttribute("min", min);
+        model.addAttribute("max", max);
         model.addAttribute("page", productsService.findAllByPagingAndFiltering(spec, PageRequest.of(0, 10))); //10 элементов на страницу
         return "products";
     }
 }
-
-//@RequestParam(name = "word", required = false) String word,
-//@RequestParam(name = "min", required = false) Integer min,
-//@RequestParam(name = "max", required = false) Integer max) {
-//        Specification<Product> spec = Specification.where(null); //выключаем фильтр, он не ставит никаких доп условий
-//        if (word != null) {
-//        spec = spec.and(ProductSpecifications.titleContains(word));
-//        }
-//        if (min != null) {
-//        spec = spec.and(ProductSpecifications.priceGreaterThanOrEq(min));
-//        }
-//        if (max != null) {
-//        spec = spec.and(ProductSpecifications.priceLesserThanOrEq(max));
-//        }
 
