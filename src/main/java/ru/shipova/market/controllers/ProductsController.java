@@ -1,6 +1,7 @@
 package ru.shipova.market.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,8 @@ public class ProductsController {
                                //параметры, которые мы ожидаем получить из формы со страницы products.html
                                @RequestParam(name = "word", required = false) String word,
                                @RequestParam(name = "min", required = false) Integer min,
-                               @RequestParam(name = "max", required = false) Integer max) {
+                               @RequestParam(name = "max", required = false) Integer max,
+                               @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
         Specification<Product> spec = Specification.where(null);
         if (word != null) {
             spec = spec.and(ProductSpecifications.titleContains(word));
@@ -40,11 +42,18 @@ public class ProductsController {
         if (max != null) {
             spec = spec.and(ProductSpecifications.priceLesserThanOrEq(max));
         }
+        if (pageNumber == null) {
+            pageNumber = 1;
+        }
+
         //добавляем параметры в model, чтобы они не сбрасывались на странице
         model.addAttribute("word", word);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
-        model.addAttribute("page", productsService.findAllByPagingAndFiltering(spec, PageRequest.of(0, 10))); //10 элементов на страницу
+        model.addAttribute("pageNumber", pageNumber);
+
+        Page<Product> page = productsService.findAllByPagingAndFiltering(spec, PageRequest.of(pageNumber - 1, 2));//2 элементов на страницу
+        model.addAttribute("page", page);
         return "products";
     }
 }

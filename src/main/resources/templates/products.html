@@ -52,17 +52,18 @@
         </tbody>
     </table>
 
-<!--    <nav aria-label="Page navigation">-->
-<!--        <ul class="pagination">-->
-<!--            &lt;!&ndash;<li class="page-item" th:if="${page.getNumber() > 0}">&ndash;&gt;-->
-<!--                &lt;!&ndash;<a th:class="page-link" th:text="${i}" th:href="@{'/products?pageNumber=' + ${page.getNumber()}}">Previous</a>&ndash;&gt;-->
-<!--            &lt;!&ndash;</li>&ndash;&gt;-->
-
-<!--            <li class="page-item" th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}" th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">-->
-<!--                <a th:class="page-link" th:text="${i}" th:href="@{'/products?pageNumber=' + ${i} + ${filters}}"></a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </nav>-->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!--                classappend означает, что если условаие "page.getNumber() + 1 == i" верное, то подсвечиваем этот элемент-->
+            <li class="page-item"
+                th:classappend="${page.getNumber() + 1 == i ? 'active' : ''}"
+                th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
+                <a th:class="page-link"
+                   th:text="${i}"
+                   th:href="@{'/products?pageNumber=' + ${i}}"></a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 </body>
