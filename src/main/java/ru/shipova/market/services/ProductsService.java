@@ -21,4 +21,12 @@ public class ProductsService {
     public Page<Product> findAllByPagingAndFiltering(Specification<Product> specification, Pageable pageable) {
         return productsRepository.findAll(specification, pageable);
     }
+
+    public Product save(Product product) {
+        return productsRepository.save(product);
+    }
+
+    public Product findById(Long id) {
+        return productsRepository.findById(id);
+    }
 }

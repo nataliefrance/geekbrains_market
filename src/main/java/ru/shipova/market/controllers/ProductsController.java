@@ -6,9 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.shipova.market.entities.Product;
 import ru.shipova.market.repositories.specifications.ProductSpecifications;
 import ru.shipova.market.services.ProductsService;
@@ -55,6 +53,21 @@ public class ProductsController {
         Page<Product> page = productsService.findAllByPagingAndFiltering(spec, PageRequest.of(pageNumber - 1, 2));//2 элементов на страницу
         model.addAttribute("page", page);
         return "products";
+    }
+
+    @GetMapping("/edit/{id}")
+    //на страницу нужно отправить объект, который мы редактируем, поэтому отправляем туда Model
+    //@PathVariable - достаём id из пути
+    public String showEditForm(Model model, @PathVariable (name = "id") Long id) {
+        Product product = productsService.findById(id);
+        model.addAttribute("product", product);
+        return "edit_product";
+    }
+
+    @PostMapping("/edit") //id не нужен, т.к. он уже будет зашит в сам объект
+    public String saveModifiedProduct(@ModelAttribute (name = "product") Product product) {
+        productsService.save(product);
+        return "redirect:/products"; //редиректим на products, чтобы увидеть, что продукт сохранился
     }
 }
 

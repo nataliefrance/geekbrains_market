@@ -45,9 +45,9 @@
             <td th:text="${product.id}"/> <!--отображаем id товара-->
             <td th:text="${product.title}"/> <!--отображаем title товара-->
             <td th:text="${product.price}"/> <!--отображаем price товара-->
-<!--            <td>-->
-<!--                <a th:href="@{'/products/edit/' + ${product.id}}">Edit</a>-->
-<!--            </td>-->
+            <td>
+                <a th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
+            </td>
         </tr>
         </tbody>
     </table>

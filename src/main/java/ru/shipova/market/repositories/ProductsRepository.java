@@ -7,4 +7,6 @@ import ru.shipova.market.entities.Product;
 
 @Repository
 public interface ProductsRepository extends PagingAndSortingRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    Product save(Product product);
+    Product findById(Long id);
 }
