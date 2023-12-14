@@ -60,7 +60,8 @@
                 th:each="i : ${#numbers.sequence(1, page.getTotalPages())}">
                 <a th:class="page-link"
                    th:text="${i}"
-                   th:href="@{'/products?pageNumber=' + ${i}}"></a>
+                   th:href="@{'/products?pageNumber=' + ${i} + ${filters}}"></a>
+                <!--                   filters приходит с бэка, это StringBuilder filtersBuilder-->
             </li>
         </ul>
     </nav>

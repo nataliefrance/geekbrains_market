@@ -3,6 +3,7 @@ package ru.shipova.market.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,14 +32,18 @@ public class ProductsController {
                                @RequestParam(name = "max", required = false) Integer max,
                                @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
         Specification<Product> spec = Specification.where(null);
-        if (word != null) {
+        StringBuilder filtersBuilder = new StringBuilder();
+        if (word != null && !word.isEmpty()) {
             spec = spec.and(ProductSpecifications.titleContains(word));
+            filtersBuilder.append("&word=" + word);
         }
         if (min != null) {
             spec = spec.and(ProductSpecifications.priceGreaterThanOrEq(min));
+            filtersBuilder.append("&min=" + min);
         }
         if (max != null) {
             spec = spec.and(ProductSpecifications.priceLesserThanOrEq(max));
+            filtersBuilder.append("&max=" + max);
         }
         if (pageNumber == null) {
             pageNumber = 1;
@@ -49,8 +54,10 @@ public class ProductsController {
         model.addAttribute("min", min);
         model.addAttribute("max", max);
         model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("filters", filtersBuilder.toString());
 
-        Page<Product> page = productsService.findAllByPagingAndFiltering(spec, PageRequest.of(pageNumber - 1, 2));//2 элементов на страницу
+        Page<Product> page = productsService.findAllByPagingAndFiltering(spec,
+                PageRequest.of(pageNumber - 1, 2, Sort.Direction.ASC, "id"));//2 элементов на страницу, Sort.Direction.ASC, "id" - сортировка по id
         model.addAttribute("page", page);
         return "products";
     }
