@@ -1,5 +1,6 @@
 package ru.shipova.market.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,14 +24,15 @@ public class ProductsController {
         this.productsService = productsService;
     }
 
-    //http://localhost:8189/app/products/
+    //http://localhost:8189/market/products/
     @GetMapping()
-    public String showProducts(Model model,
+    public String showProducts(Model model, HttpServletRequest request,
                                //параметры, которые мы ожидаем получить из формы со страницы products.html
                                @RequestParam(name = "word", required = false) String word,
                                @RequestParam(name = "min", required = false) Integer min,
                                @RequestParam(name = "max", required = false) Integer max,
                                @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
+        System.out.println(request.getHeader("referer")); //Покажет с какой url мы сюда попали
         Specification<Product> spec = Specification.where(null);
         StringBuilder filtersBuilder = new StringBuilder();
         if (word != null && !word.isEmpty()) {
@@ -62,18 +64,25 @@ public class ProductsController {
         return "products";
     }
 
-    @GetMapping("/edit/{id}")
+    //edit используется и для редактирования, и для сохранения продукта
+    @GetMapping("/edit")
     //на страницу нужно отправить объект, который мы редактируем, поэтому отправляем туда Model
-    //@PathVariable - достаём id из пути
-    public String showEditForm(Model model, @PathVariable (name = "id") Long id) {
-        Product product = productsService.findById(id);
+    //если @PathVariable - достаём id из пути
+    //@RequestParam - параметр, который мы ожидаем получить из формы со страницы products.html (th:href="@{'/products/edit?id=' + ${product.id}}")
+    public String showEditForm(Model model, @RequestParam (name = "id", required = false) Long id) {
+        Product product = null;
+        if (id != null) {
+            product = productsService.findById(id);
+        } else {
+            product = new Product();
+        }
         model.addAttribute("product", product);
         return "edit_product";
     }
 
     @PostMapping("/edit") //id не нужен, т.к. он уже будет зашит в сам объект
     public String saveModifiedProduct(@ModelAttribute (name = "product") Product product) {
-        productsService.save(product);
+        productsService.save(product); //если у product будет id, мы его обновим, иначе - создадим новый
         return "redirect:/products"; //редиректим на products, чтобы увидеть, что продукт сохранился
     }
 }

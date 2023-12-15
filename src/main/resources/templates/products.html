@@ -46,11 +46,12 @@
             <td th:text="${product.title}"/> <!--отображаем title товара-->
             <td th:text="${product.price}"/> <!--отображаем price товара-->
             <td>
-                <a th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
+                <a th:href="@{'/products/edit?id=' + ${product.id}}">Edit</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a class="btn btn-success" th:href="@{'/products/edit'}">Add new product</a>
 
     <nav aria-label="Page navigation">
         <ul class="pagination">
