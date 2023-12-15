@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.shipova.market.entities.Product;
 import ru.shipova.market.repositories.specifications.ProductSpecifications;
 import ru.shipova.market.services.ProductsService;
+import ru.shipova.market.utils.ProductsFilter;
 
 @Controller
 @RequestMapping("/products")
@@ -32,33 +33,17 @@ public class ProductsController {
                                @RequestParam(name = "min", required = false) Integer min,
                                @RequestParam(name = "max", required = false) Integer max,
                                @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
-        System.out.println(request.getHeader("referer")); //Покажет с какой url мы сюда попали
-        Specification<Product> spec = Specification.where(null);
-        StringBuilder filtersBuilder = new StringBuilder();
-        if (word != null && !word.isEmpty()) {
-            spec = spec.and(ProductSpecifications.titleContains(word));
-            filtersBuilder.append("&word=" + word);
-        }
-        if (min != null) {
-            spec = spec.and(ProductSpecifications.priceGreaterThanOrEq(min));
-            filtersBuilder.append("&min=" + min);
-        }
-        if (max != null) {
-            spec = spec.and(ProductSpecifications.priceLesserThanOrEq(max));
-            filtersBuilder.append("&max=" + max);
-        }
-        if (pageNumber == null) {
+        //System.out.println(request.getHeader("referer")); //Покажет с какой url мы сюда попали
+
+        ProductsFilter filter = new ProductsFilter(request);
+
+        if (pageNumber == null || pageNumber < 1) {
             pageNumber = 1;
         }
-
         //добавляем параметры в model, чтобы они не сбрасывались на странице
-        model.addAttribute("word", word);
-        model.addAttribute("min", min);
-        model.addAttribute("max", max);
         model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("filters", filtersBuilder.toString());
-
-        Page<Product> page = productsService.findAllByPagingAndFiltering(spec,
+        model.addAttribute("filters", filter.getFiltersString());
+        Page<Product> page = productsService.findAllByPagingAndFiltering(filter.getSpec(),
                 PageRequest.of(pageNumber - 1, 2, Sort.Direction.ASC, "id"));//2 элементов на страницу, Sort.Direction.ASC, "id" - сортировка по id
         model.addAttribute("page", page);
         return "products";
