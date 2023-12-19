@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Market</title>
+    <!--    подключаем bootstrap, чтобы было хоть какое-то оформление-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<!--fragment - блоки, которые можно подшивать в другие страницы-->
+<!--Когда кто-то будет вшивать фрагмент в страницу, он будет в activeTab что-то передавать. Так будет понятно, какая кнопка будет активной-->
+<div th:fragment="navigation(activeTab)">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+<!--                если условие выполнено, то мы к классу добавляем active: th:classappend="${activeTab == 'Home' ? 'active' : ''}"-->
+                <li class="nav-item" th:classappend="${activeTab == 'Home' ? 'active' : ''}">
+<!--                    ведёт в корень приложения: href="@{/}"-->
+                    <a class="nav-link" th:href="@{/}">Home</a>
+                </li>
+                <li class="nav-item" th:classappend="${activeTab == 'Shop' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/products}">Shop</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

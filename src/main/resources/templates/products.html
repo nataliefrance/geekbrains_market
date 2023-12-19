@@ -14,7 +14,9 @@
 <body>
 
 <div class="container">
-    <br>
+<!--    Панель навигации-->
+    <div th:replace="~{navigation :: navigation(Home)}" />
+
     <h1 th:text="Фильтры" />
 <!--    th:action="@{/products}" - редиректим на /products-->
     <form th:action="@{/products}" method="GET">
