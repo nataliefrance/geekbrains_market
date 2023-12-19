@@ -28,12 +28,36 @@ public class ProductRestController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED) //меняем статус на 201
     public Product addNewProduct(@RequestBody Product product) {
+        product.setId(null);
         return productsRepository.save(product);
     }
 
     @GetMapping("/{id}")
     public Product findOne(@PathVariable Long id) {
         return productsRepository.findById(id).orElseThrow();
+    }
+
+    @PutMapping("/{id}")
+    public Product saveOrUpdate(@PathVariable Long id, @RequestBody Product newProduct) {
+         productsRepository.findById(id)
+                .ifPresent(product -> {
+                    product.setTitle(newProduct.getTitle());
+                    product.setPrice(newProduct.getPrice());
+                    productsRepository.save(product);
+                });
+
+        return productsRepository.findById(id)
+                .map(product -> {
+                    product.setTitle(newProduct.getTitle());
+                    product.setPrice(newProduct.getPrice());
+                    return productsRepository.save(product);
+                })
+                .orElseThrow();
+    }
+
+    @PutMapping("/")
+    public Product updateProduct(@RequestBody Product product) {
+        return productsRepository.save(product);
     }
 
     @DeleteMapping("/{id}")
