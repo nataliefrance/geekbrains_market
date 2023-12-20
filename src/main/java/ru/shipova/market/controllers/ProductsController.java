@@ -1,18 +1,17 @@
 package ru.shipova.market.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.shipova.market.entities.Product;
-import ru.shipova.market.repositories.specifications.ProductSpecifications;
 import ru.shipova.market.services.ProductsService;
 import ru.shipova.market.utils.ProductsFilter;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/products")

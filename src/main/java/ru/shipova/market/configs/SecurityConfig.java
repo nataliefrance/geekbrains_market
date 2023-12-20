@@ -1,5 +1,6 @@
 package ru.shipova.market.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,10 +14,11 @@ import ru.shipova.market.services.UserService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true) //возможность защищать отдельные методы аннотацией secure
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
+    @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
@@ -67,8 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
         auth.setUserDetailsService(userService); //даём auth ссылку на userService, чтобы он мог работать с пользователями
-        auth.setPasswordEncoder(passwordEncoder());//пароль, кот. введёт user, нужно прогнать через BCryptPasswordEncoder
+        auth.setPasswordEncoder(passwordEncoder()); //пароль, кот. введёт user, нужно прогнать через BCryptPasswordEncoder
         return auth;
     }
-
 }

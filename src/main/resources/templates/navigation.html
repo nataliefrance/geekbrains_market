@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <title>Market</title>
+    <title>September Market</title>
     <!--    подключаем bootstrap, чтобы было хоть какое-то оформление-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -18,13 +18,40 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-<!--                если условие выполнено, то мы к классу добавляем active: th:classappend="${activeTab == 'Home' ? 'active' : ''}"-->
+                <!--                если условие выполнено, то мы к классу добавляем active: th:classappend="${activeTab == 'Home' ? 'active' : ''}"-->
                 <li class="nav-item" th:classappend="${activeTab == 'Home' ? 'active' : ''}">
-<!--                    ведёт в корень приложения: href="@{/}"-->
+                    <!--                    ведёт в корень приложения: href="@{/}"-->
                     <a class="nav-link" th:href="@{/}">Home</a>
                 </li>
                 <li class="nav-item" th:classappend="${activeTab == 'Shop' ? 'active' : ''}">
-                    <a class="nav-link" th:href="@{/products}">Shop</a>
+                    <a class="nav-link" th:href="@{/shop}">Shop</a>
+                </li>
+                <li class="nav-item" th:classappend="${activeTab == 'Cart' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/cart}">Cart</a>
+                </li>
+                <!--                Чтобы user увидел class="nav-item", у него должна быть роль ADMIN-->
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item"
+                    th:classappend="${activeTab == 'AdminDashboard' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/admin}">Admin Dashboard</a>
+                </li>
+                <!--                Если user аутентифицирован, то он имеет возможность отсюда уйти. Показываем форму, которая пошлёт POST-запрос на logout-->
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <form th:action="@{/logout}" method="POST">
+                        <!--                Это будет красная кнопка с надписью logout-->
+                        <input type="submit" class="btn btn-danger" value="Logout"/>
+                    </form>
+                </li>
+                <!--                Если user ходит в виде гостя (анонимно), мы показываем ему форму с надписями логин и пароль-->
+                <li sec:authorize="isAnonymous()" class="nav-item">
+                    <form class="align-middle" th:action="@{/authenticateTheUser}" method="POST">
+                        <div class="input-group-prepend">
+                            <input class="form-control" type="text" placeholder="Login" name="username"
+                                   aria-describedby="inputGroup-sizing-sm">
+                            <input class="form-control" type="text" placeholder="Password" name="password"
+                                   aria-describedby="inputGroup-sizing-sm">
+                            <button class="btn btn-primary btn-sm" type="submit">Log In</button>
+                        </div>
+                    </form>
                 </li>
             </ul>
         </div>

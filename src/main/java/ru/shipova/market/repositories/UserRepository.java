@@ -6,5 +6,5 @@ import ru.shipova.market.entities.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
-    User findOneByUserName (String username);
+    User findOneByUsername (String username);
 }

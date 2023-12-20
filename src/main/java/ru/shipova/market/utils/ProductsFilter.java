@@ -1,17 +1,16 @@
 package ru.shipova.market.utils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
 import ru.shipova.market.entities.Product;
 import ru.shipova.market.repositories.specifications.ProductSpecifications;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
 @Getter
 public class ProductsFilter {
     private Specification<Product> spec;
-    private StringBuilder filtersString;
+    private final StringBuilder filtersString;
 
     public ProductsFilter(HttpServletRequest request) {
         this.spec = Specification.where(null);
