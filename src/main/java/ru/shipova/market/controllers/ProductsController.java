@@ -24,30 +24,6 @@ public class ProductsController {
         this.productsService = productsService;
     }
 
-    //http://localhost:8189/market/products/
-    @GetMapping()
-    public String showProducts(Model model, HttpServletRequest request,
-                               //параметры, которые мы ожидаем получить из формы со страницы products.html
-                               @RequestParam(name = "word", required = false) String word,
-                               @RequestParam(name = "min", required = false) Integer min,
-                               @RequestParam(name = "max", required = false) Integer max,
-                               @RequestParam(name = "pageNumber", required = false) Integer pageNumber) {
-        //System.out.println(request.getHeader("referer")); //Покажет с какой url мы сюда попали
-
-        ProductsFilter filter = new ProductsFilter(request);
-
-        if (pageNumber == null || pageNumber < 1) {
-            pageNumber = 1;
-        }
-        //добавляем параметры в model, чтобы они не сбрасывались на странице
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("filters", filter.getFiltersString());
-        Page<Product> page = productsService.findAllByPagingAndFiltering(filter.getSpec(),
-                PageRequest.of(pageNumber - 1, 2, Sort.Direction.ASC, "id"));//2 элементов на страницу, Sort.Direction.ASC, "id" - сортировка по id
-        model.addAttribute("page", page);
-        return "products";
-    }
-
     //edit используется и для редактирования, и для сохранения продукта
     @GetMapping("/edit")
     //на страницу нужно отправить объект, который мы редактируем, поэтому отправляем туда Model

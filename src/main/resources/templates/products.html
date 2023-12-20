@@ -15,11 +15,11 @@
 
 <div class="container">
 <!--    Панель навигации-->
-    <div th:replace="~{navigation :: navigation(Home)}" />
+    <div th:replace="~{navigation :: navigation(Shop)}" />
 
     <h1 th:text="Фильтры" />
 <!--    th:action="@{/products}" - редиректим на /products-->
-    <form th:action="@{/products}" method="GET">
+    <form th:action="@{/shop}" method="GET">
 <!--        th:value="${word != null} ? ${word}" - если word есть (его туда уже вбили, то мы туда вбиваем значение,
             которое лежит в параметре ${word}. -->
         <input th:value="${word != null} ? ${word}" th:name="word" type="text" placeholder="Название">
