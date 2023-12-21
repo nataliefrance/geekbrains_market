@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Cart</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+<!--    Панель навигации-->
+    <div th:replace="~{navigation :: navigation(Home)}" />
+
+    <h1>Cart</h1>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+<!--            столбец под действия-->
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+<!--        перебираем все продукты-->
+        <tr th:each="product : ${products}"> <!--в page завёрнут List<Products>, вытаскиваем его оттуда и начинаем перебирать> -->
+            <td th:text="${product.id}"/> <!--отображаем id товара-->
+            <td th:text="${product.title}"/> <!--отображаем title товара-->
+            <td th:text="${product.price}"/> <!--отображаем price товара-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
