@@ -25,16 +25,16 @@
             <th>ID</th>
             <th>Название товара</th>
             <th>Цена</th>
-<!--            столбец под действия-->
-            <th></th>
+            <th>Количество</th>
         </tr>
         </thead>
         <tbody>
 <!--        перебираем все продукты-->
-        <tr th:each="product : ${products}"> <!--в page завёрнут List<Products>, вытаскиваем его оттуда и начинаем перебирать> -->
-            <td th:text="${product.id}"/> <!--отображаем id товара-->
-            <td th:text="${product.title}"/> <!--отображаем title товара-->
-            <td th:text="${product.price}"/> <!--отображаем price товара-->
+        <tr th:each="item : ${products}"><!--products - это HashMap-->
+            <td th:text="${item.key.id}"/> <!--отображаем id товара-->
+            <td th:text="${item.key.title}"/> <!--отображаем title товара-->
+            <td th:text="${item.key.price}"/> <!--отображаем price товара-->
+            <td th:text="${item.value}"/>
         </tr>
         </tbody>
     </table>

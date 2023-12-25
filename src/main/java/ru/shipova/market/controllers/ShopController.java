@@ -43,7 +43,7 @@ public class ShopController {
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("filters", filter.getFiltersString());
         Page<Product> page = productsService.findAllByPagingAndFiltering(filter.getSpec(),
-                PageRequest.of(pageNumber - 1, 2, Sort.Direction.ASC, "id"));//2 элементов на страницу, Sort.Direction.ASC, "id" - сортировка по id
+                PageRequest.of(pageNumber - 1, 10, Sort.Direction.ASC, "id"));//10 элементов на страницу, Sort.Direction.ASC, "id" - сортировка по id
         model.addAttribute("page", page);
         return "shop";
     }
